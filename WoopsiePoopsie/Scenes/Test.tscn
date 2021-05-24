@@ -1,0 +1,146 @@
+[gd_scene load_steps=29 format=2]
+
+[ext_resource path="res://Scripts/Held.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Player.gd" type="Script" id=2]
+[ext_resource path="res://Assets/Placeholders/mcrunwhilehold.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Placeholders/mcrun.png" type="Texture" id=4]
+[ext_resource path="res://Assets/Placeholders/mcidlewhilehold.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Placeholders/stick.png" type="Texture" id=6]
+[ext_resource path="res://Assets/Placeholders/mcidle.png" type="Texture" id=7]
+[ext_resource path="res://Scenes/Stick.gd" type="Script" id=8]
+[ext_resource path="res://Scenes/Bullets/Swipe.tscn" type="PackedScene" id=9]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 7 )
+region = Rect2( 0, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 7 )
+region = Rect2( 24, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 7 )
+region = Rect2( 48, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 7 )
+region = Rect2( 72, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 3 )
+region = Rect2( 24, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 3 )
+region = Rect2( 48, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 3 )
+region = Rect2( 72, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 4 )
+region = Rect2( 24, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 4 )
+region = Rect2( 48, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 4 )
+region = Rect2( 72, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 5 )
+region = Rect2( 24, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 5 )
+region = Rect2( 48, 0, 24, 48 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 5 )
+region = Rect2( 72, 0, 24, 48 )
+
+[sub_resource type="SpriteFrames" id=13]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ],
+"loop": true,
+"name": "idle",
+"speed": 6.0
+}, {
+"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ) ],
+"loop": true,
+"name": "run_hold",
+"speed": 8.0
+}, {
+"frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ) ],
+"loop": true,
+"name": "run",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ) ],
+"loop": true,
+"name": "idle_hold",
+"speed": 5.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=14]
+radius = 20.1948
+height = 29.0701
+
+[sub_resource type="SpriteFrames" id=15]
+animations = [ {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="Test" type="Node2D"]
+
+[node name="Bullets" type="Node2D" parent="."]
+
+[node name="Player" type="KinematicBody2D" parent="."]
+script = ExtResource( 2 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Player"]
+position = Vector2( -0.2766, -12.417 )
+scale = Vector2( 2.67425, 2.78616 )
+frames = SubResource( 13 )
+animation = "run_hold"
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2( 0, -10.0794 )
+shape = SubResource( 14 )
+
+[node name="Held" type="Node2D" parent="Player"]
+position = Vector2( 13.0815, 19.0919 )
+script = ExtResource( 1 )
+
+[node name="Stick" type="Node2D" parent="Player/Held"]
+script = ExtResource( 8 )
+bullet = ExtResource( 9 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Player/Held/Stick"]
+position = Vector2( 24.9255, 1.75683 )
+rotation = 1.5708
+scale = Vector2( 2.35529, 2.35529 )
+frames = SubResource( 15 )
+
+[node name="Cooldown" type="Timer" parent="Player/Held/Stick"]
+one_shot = true
+[connection signal="timeout" from="Player/Held/Stick/Cooldown" to="Player/Held/Stick" method="_on_Cooldown_timeout"]
